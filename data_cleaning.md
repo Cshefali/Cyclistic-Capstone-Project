@@ -18,7 +18,7 @@ They contain ride details about the bikes hired for commute.
 12. end_lng
 13. casual_member- 2 categories: members, casual (users without membership)
 
-#### What does my processed dataset contains?
+#### What does my processed dataset contain?
 1. ride_id
 2. bike_type- (renamed from rideable type)
 3. start_time
@@ -48,7 +48,24 @@ Function used: total_na_count <- rbind(jan_na_count,feb_na_count,...)
   * rows- one row for each month- Jan, Feb,..so on.
   * values- the cell values contain total missing values for the given [row,column]
   For e.g.
-    *If in January row, 1st column ride_type contains 0, it implies no missing values in ride_id column of January csv file.
+    * If in January row, 1st column ride_id contains 0, it implies no missing values in ride_id column of January csv file.
     * If in February row, start_station_name contains say, 15600, it implies that in the Feb csv file, there are 15,600 missing values in station_name column.  
     
 #### What's the point in calculating all these missing values in this manner?
+
+#### Removal of rows/columns with NA values:
+1. Removed all columns with station names and station ids. [4 columns]
+2. Removed all rows with no end station latitude and longitude.
+Now the dataset contains no missing values.  
+All NA values were removed with minimum data loss. 
+
+#### Other Wrangling steps:
+1. Remove all duplicate rows.  
+Function used: 
+2. Check whether all values in ride_id column contain 16 characters or not.  
+The ones with more or less than 16 will be discarded.  
+3. Rounding off latitude and longitude values.
+  * This was a tricky part- rounding-off is not a good option for gps data, as more the decimal places, more accurate is the data. Will update this after completing analysis.
+  * Currently, rounded off to 4 decimal places.
+
+#### After performing all these steps, the data will be ready for analysis. Phew!!
