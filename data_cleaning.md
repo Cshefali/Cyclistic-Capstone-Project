@@ -52,20 +52,28 @@ Function used: total_na_count <- rbind(jan_na_count,feb_na_count,...)
     * If in February row, start_station_name contains say, 15600, it implies that in the Feb csv file, there are 15,600 missing values in station_name column.  
     
 #### What's the point in calculating all these missing values in this manner?
+Objective was to detect whether missing values are present in all columns or specific columns in all 12 files. The latter turned out to be true. All 12 files contained missing values only in the following columns- station names, station ids, end latitude and end longitude.
 
 #### Removal of rows/columns with NA values:
-1. Removed all columns with station names and station ids. [4 columns]
-2. Removed all rows with no end station latitude and longitude.
+1. Removed all columns with station names and station ids. [4 columns]  
+Function used: year_dataset <- select(year_dataset,-c("start_station_name",                         "start_station_id", "end_station_name","end_station_id"))
+2. Removed all rows with no end station latitude and longitude.  
+Function used: 
 Now the dataset contains no missing values.  
 All NA values were removed with minimum data loss. 
 
 #### Other Wrangling steps:
 1. Remove all duplicate rows.  
-Function used: 
+Function used: sum(duplicated(year_dataset))  
+if sum returned is 0, it implies no duplicate rows found.  
+
 2. Check whether all values in ride_id column contain 16 characters or not.  
 The ones with more or less than 16 will be discarded.  
+id_length <- data.frame(nchar(year_dataset$ride_id))  
+distinct(id_length)  
+
 3. Rounding off latitude and longitude values.
-  * This was a tricky part- rounding-off is not a good option for gps data, as more the decimal places, more accurate is the data. Will update this after completing analysis.
-  * Currently, rounded off to 4 decimal places.
+  * This was a tricky part- rounding-off is not a good option for gps data, as more the decimal places, more accurate is the data.  
+  [I did not round off grid values.]
 
 #### After performing all these steps, the data will be ready for analysis. Phew!!
